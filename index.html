@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
+<title>TrueScale — see how big places really are</title>
+<meta name="description" content="Drag countries, states and provinces around the map to compare their real size. The Mercator map lies; TrueScale shows you by how much. No ads, no tracking." />
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+      integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
+<link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+<a class="skip-link" href="#search">Skip to search</a>
+
+<header class="app-header">
+  <div class="brand">
+    <span class="logo" aria-hidden="true">◉</span>
+    <h1>TrueScale</h1>
+    <span class="tag">the map lies — see by how much</span>
+  </div>
+  <div class="header-actions">
+    <a href="/tools.html" class="ghost-btn" title="More tools by Maxwell Howe">↗ More tools</a>
+    <button id="aboutBtn" class="ghost-btn" aria-haspopup="dialog">About</button>
+  </div>
+</header>
+
+<main class="layout">
+  <section class="panel" aria-label="Controls">
+    <div class="field">
+      <label for="search">Add a country, state or province</label>
+      <input id="search" type="search" autocomplete="off" spellcheck="false"
+             placeholder="e.g. Greenland, Texas, Ontario…"
+             role="combobox" aria-expanded="false" aria-controls="results" aria-autocomplete="list" />
+      <ul id="results" class="results" role="listbox" hidden></ul>
+    </div>
+
+    <div class="presets">
+      <span class="presets-label">Try a classic:</span>
+      <div id="presets" class="presets-row"></div>
+    </div>
+
+    <div id="readout" class="readout" aria-live="polite"></div>
+
+    <div class="field" id="compareField" hidden>
+      <label for="compareTo">Compare selected to</label>
+      <select id="compareTo"></select>
+      <p id="compareLine" class="compare-line"></p>
+    </div>
+
+    <label class="toggle"><input type="checkbox" id="gratToggle" /> Show latitude grid</label>
+
+    <h2 class="section-title">On the map <span id="count" class="count"></span></h2>
+    <ul id="pieces" class="pieces" aria-label="Shapes on the map"></ul>
+
+    <div class="actions">
+      <button id="shareBtn" class="primary-btn">Copy share link</button>
+      <button id="clearBtn" class="ghost-btn">Clear all</button>
+    </div>
+
+    <p class="hint">Drag a shape to move it. Watch it grow toward the poles — that's the Mercator
+      distortion. Select a shape and use arrow keys to nudge, <kbd>Delete</kbd> to remove.</p>
+  </section>
+
+  <div id="map" class="map" role="application" aria-label="Interactive map. Drag shapes to compare their real size."></div>
+</main>
+
+<div id="aboutDialog" class="dialog" role="dialog" aria-modal="true" aria-labelledby="aboutTitle" hidden>
+  <div class="dialog-card">
+    <h2 id="aboutTitle">About TrueScale</h2>
+    <p>The world map you grew up with — the <strong>Web Mercator</strong> projection — stretches
+      land near the poles. Greenland looks as big as Africa. It is <em>14 times smaller</em>.</p>
+    <p>TrueScale keeps each shape's <strong>real, on-the-ground size</strong> as you drag it. Move a
+      country toward a pole and it balloons, exactly as Mercator distorts it. Move it to the equator
+      to see its honest size.</p>
+    <p class="muted">Boundaries: Natural Earth (public domain). Area math: Turf.js. Map: Leaflet +
+      OpenStreetMap. No ads, no trackers, no cookies — just <a id="srcLink" href="#">the source</a>.</p>
+    <button id="aboutClose" class="primary-btn">Got it</button>
+  </div>
+</div>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+        integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+<script src="https://unpkg.com/@turf/turf@6/turf.min.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
