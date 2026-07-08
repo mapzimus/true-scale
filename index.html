@@ -2,7 +2,12 @@
 <html lang="en">
 <head>
 <meta charset="utf-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta name="theme-color" content="#0f1620" />
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+<meta name="apple-mobile-web-app-title" content="TrueScale" />
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%230f1620'/%3E%3Ccircle cx='16' cy='16' r='7' fill='none' stroke='%23ffc24b' stroke-width='3'/%3E%3Ccircle cx='16' cy='16' r='2.5' fill='%23ffc24b'/%3E%3C/svg%3E" />
 <title>TrueScale — see how big places really are</title>
 <meta name="description" content="Drag countries, states and provinces around the map to compare their real size. The Mercator map lies; TrueScale shows you by how much. No ads, no tracking." />
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
@@ -19,13 +24,13 @@
     <span class="tag">the map lies — see by how much</span>
   </div>
   <div class="header-actions">
-    <a href="/tools.html" class="ghost-btn" title="More tools by Maxwell Howe">↗ More tools</a>
     <button id="aboutBtn" class="ghost-btn" aria-haspopup="dialog">About</button>
   </div>
 </header>
 
 <main class="layout">
-  <section class="panel" aria-label="Controls">
+  <section class="panel" id="panel" aria-label="Controls">
+    <button id="sheetHandle" class="sheet-handle" type="button" aria-expanded="false" aria-controls="panel">Controls</button>
     <div class="field">
       <label for="search">Add a country, state or province</label>
       <input id="search" type="search" autocomplete="off" spellcheck="false"
@@ -57,8 +62,8 @@
       <button id="clearBtn" class="ghost-btn">Clear all</button>
     </div>
 
-    <p class="hint">Drag a shape to move it. Watch it grow toward the poles — that's the Mercator
-      distortion. Select a shape and use arrow keys to nudge, <kbd>Delete</kbd> to remove.</p>
+    <p class="hint">Drag a shape to move it — watch it grow toward the poles; that's the Mercator
+      distortion. Tap ✕ on a shape to remove it. <span class="kb-hint">On a keyboard: arrow keys nudge, <kbd>Delete</kbd> removes.</span></p>
   </section>
 
   <div id="map" class="map" role="application" aria-label="Interactive map. Drag shapes to compare their real size."></div>

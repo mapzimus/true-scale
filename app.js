@@ -6,7 +6,8 @@
   // ---- constants -----------------------------------------------------------
   var EARTH_LAND_KM2 = 148940000;          // total land area, km²
   var KM2_TO_MI2 = 0.386102159;
-  var REPO = "https://github.com/mapzimus/maxwellhowegis/tree/main/truescale";
+  var US_ADMIN = "United States of America"; // only this country's admin-1 shapes are indexed
+  var REPO = "https://github.com/mapzimus/true-scale";
   var DATA = {
     countries: "https://cdn.jsdelivr.net/gh/nvkelso/natural-earth-vector@master/geojson/ne_110m_admin_0_countries.geojson",
     admin1: "https://cdn.jsdelivr.net/gh/nvkelso/natural-earth-vector@master/geojson/ne_50m_admin_1_states_provinces.geojson"
@@ -55,7 +56,12 @@
     (admin1.features || []).forEach(function (f) {
       var p = f.properties || {}, name = p.name || p.name_en || p.gn_name;
       if (!name) return;
-      var admin = p.admin || "", kind = p.type_en || p.type || "Region";
+      var admin = p.admin || "";
+      // Only US states/territories come in as sub-national shapes; every other place
+      // (Russia, China, etc.) stays whole as a country. Otherwise searching "Russia"
+      // buries the country under dozens of its oblasts.
+      if (admin !== US_ADMIN) return;
+      var kind = p.type_en || p.type || "Region";
       addRec("s::" + admin + "::" + name, name, admin, kind, f);
     });
     recList.sort(function (a, b) { return a.name.localeCompare(b.name); });
@@ -400,7 +406,7 @@
       li.setAttribute("aria-selected", i === activeResult ? "true" : "false");
       li.innerHTML = '<span>' + esc(r.name) + (r.sub ? ' <span style="opacity:.6">· ' + esc(r.sub) + '</span>' : '') +
                      '</span><span class="kind">' + esc(r.kind) + '</span>';
-      li.addEventListener("mousedown", function (e) { e.preventDefault(); chooseResult(r); });
+      li.addEventListener("pointerdown", function (e) { e.preventDefault(); chooseResult(r); });
       resultsEl.appendChild(li);
     });
     resultsEl.hidden = false;
@@ -510,6 +516,21 @@
     presetsEl.appendChild(b);
   });
   gratToggle.addEventListener("change", function () { toggleGraticule(gratToggle.checked); });
+
+  // ---- bottom-sheet toggle (mobile) ---------------------------------------
+  var sheetHandle = $("#sheetHandle");
+  function setSheet(open) {
+    document.body.classList.toggle("sheet-open", open);
+    if (sheetHandle) {
+      sheetHandle.setAttribute("aria-expanded", open ? "true" : "false");
+      sheetHandle.textContent = open ? "Hide controls ▾" : "Controls ▴";
+    }
+  }
+  if (sheetHandle) {
+    sheetHandle.addEventListener("click", function () { setSheet(!document.body.classList.contains("sheet-open")); });
+    searchEl.addEventListener("focus", function () { setSheet(true); });
+    setSheet(false);
+  }
 
   // ---- go ------------------------------------------------------------------
   initMap();
