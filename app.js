@@ -6,6 +6,7 @@
   // ---- constants -----------------------------------------------------------
   var EARTH_LAND_KM2 = 148940000;          // total land area, km²
   var KM2_TO_MI2 = 0.386102159;
+  var US_ADMIN = "United States of America"; // only this country's admin-1 shapes are indexed
   var REPO = "https://github.com/mapzimus/maxwellhowegis/tree/main/truescale";
   var DATA = {
     countries: "https://cdn.jsdelivr.net/gh/nvkelso/natural-earth-vector@master/geojson/ne_110m_admin_0_countries.geojson",
@@ -55,7 +56,12 @@
     (admin1.features || []).forEach(function (f) {
       var p = f.properties || {}, name = p.name || p.name_en || p.gn_name;
       if (!name) return;
-      var admin = p.admin || "", kind = p.type_en || p.type || "Region";
+      var admin = p.admin || "";
+      // Only US states/territories come in as sub-national shapes; every other place
+      // (Russia, China, etc.) stays whole as a country. Otherwise searching "Russia"
+      // buries the country under dozens of its oblasts.
+      if (admin !== US_ADMIN) return;
+      var kind = p.type_en || p.type || "Region";
       addRec("s::" + admin + "::" + name, name, admin, kind, f);
     });
     recList.sort(function (a, b) { return a.name.localeCompare(b.name); });
