@@ -406,7 +406,7 @@
       li.setAttribute("aria-selected", i === activeResult ? "true" : "false");
       li.innerHTML = '<span>' + esc(r.name) + (r.sub ? ' <span style="opacity:.6">· ' + esc(r.sub) + '</span>' : '') +
                      '</span><span class="kind">' + esc(r.kind) + '</span>';
-      li.addEventListener("mousedown", function (e) { e.preventDefault(); chooseResult(r); });
+      li.addEventListener("pointerdown", function (e) { e.preventDefault(); chooseResult(r); });
       resultsEl.appendChild(li);
     });
     resultsEl.hidden = false;
@@ -516,6 +516,21 @@
     presetsEl.appendChild(b);
   });
   gratToggle.addEventListener("change", function () { toggleGraticule(gratToggle.checked); });
+
+  // ---- bottom-sheet toggle (mobile) ---------------------------------------
+  var sheetHandle = $("#sheetHandle");
+  function setSheet(open) {
+    document.body.classList.toggle("sheet-open", open);
+    if (sheetHandle) {
+      sheetHandle.setAttribute("aria-expanded", open ? "true" : "false");
+      sheetHandle.textContent = open ? "Hide controls ▾" : "Controls ▴";
+    }
+  }
+  if (sheetHandle) {
+    sheetHandle.addEventListener("click", function () { setSheet(!document.body.classList.contains("sheet-open")); });
+    searchEl.addEventListener("focus", function () { setSheet(true); });
+    setSheet(false);
+  }
 
   // ---- go ------------------------------------------------------------------
   initMap();
