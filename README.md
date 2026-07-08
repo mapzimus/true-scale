@@ -35,6 +35,12 @@ python -m http.server 8000
 # then open http://localhost:8000
 ```
 
+## Hosting
+
+Published with **GitHub Pages** straight from this repo (`main` branch, repo root) via the workflow
+in `.github/workflows/pages.yml`. Every push to `main` redeploys. Live at
+<https://mapzimus.github.io/true-scale/>.
+
 ## Stack
 
 - [Leaflet](https://leafletjs.com) — slippy map (Web Mercator).
