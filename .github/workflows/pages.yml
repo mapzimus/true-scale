@@ -5,13 +5,11 @@ on:
     branches: [main]
   workflow_dispatch:
 
-# Allow the workflow to publish to Pages and mint an OIDC token for deploy-pages.
+# The site is published from the gh-pages branch (Pages "deploy from a branch" mode),
+# so the job only needs permission to push that branch.
 permissions:
-  contents: read
-  pages: write
-  id-token: write
+  contents: write
 
-# One in-flight deploy at a time; newer pushes supersede older runs.
 concurrency:
   group: pages
   cancel-in-progress: true
@@ -19,22 +17,9 @@ concurrency:
 jobs:
   deploy:
     runs-on: ubuntu-latest
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-      - name: Configure Pages
-        # enablement:true turns Pages on via the API on first run when token perms allow,
-        # so no manual Settings toggle is needed in the common case.
-        uses: actions/configure-pages@v5
-        with:
-          enablement: true
-      - name: Upload site artifact
-        uses: actions/upload-pages-artifact@v3
-        with:
-          path: "."
-      - name: Deploy
-        id: deployment
-        uses: actions/deploy-pages@v4
+      - name: Mirror main to gh-pages
+        # Static site with no build step: gh-pages is always an exact copy of main.
+        run: git push --force origin HEAD:gh-pages
